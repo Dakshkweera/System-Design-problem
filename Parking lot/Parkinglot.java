@@ -34,9 +34,28 @@ public class Parkinglot {
         return null;
     }
 
-    public void exit(Ticket ticket){
+    public int calculateamt(Ticket ticket){
+        LocalDateTime entryTime = ticket.getEntryTime();
+        LocalDateTime exitTime = getcurtime();
+        long duration = java.time.Duration.between(entryTime, exitTime).toMinutes();
+        int amount = 0;
+        if(ticket.getParkingSpot().getType() == Vehicletype.Truck){
+            amount += 50*duration+100;
+        }
+        else if(ticket.getParkingSpot().getType() == Vehicletype.Car){
+            amount += 20*duration+50;
+        }
+        else if(ticket.getParkingSpot().getType() == Vehicletype.Bike){
+            amount += 10*duration+20;
+        }
+        return amount;
+    }
+    public Recipt exit(Ticket ticket, payment pay){
+        int amt = calculateamt(ticket);
+        pay.pay(amt);
         ParkingSpot spot = ticket.getParkingSpot();
         spot.unpark();
-        System.out.println("Vehicle with ticket ID: " + ticket.getTicketId() + " has exited.");
+        Recipt recipt = new Recipt(ticket.getTicketId(), amt, ticket.getEntryTime(), getcurtime(), pay);
+        return recipt;
     }
 }

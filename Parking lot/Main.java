@@ -17,10 +17,15 @@ public class Main {
         parkinglot.add(floor2);
 
         Ticket ticket1 = parkinglot.park(vehicle1);
-
         Ticket ticket2 = parkinglot.park(vehicle2);
-        System.out.println(ticket1.getEntryTime());
-        parkinglot.exit(ticket1);
-        parkinglot.exit(ticket2);
+
+
+        // System.out.println(ticket1.getEntryTime());
+
+        Recipt recipt1 = parkinglot.exit(ticket1, new cashPayment());
+        Recipt recipt2 = parkinglot.exit(ticket2, new UPI());
+        
+        recipt1.generateRecipt();
+        recipt2.generateRecipt();
     }
 }
