@@ -1,21 +1,28 @@
 public class IdleState implements VendingMachineState {
 
+    
     @Override
-    public void selectItem(VendingMachine m, String code) {
-        Slot slot = m.getSlot(code);
-        if(slot == null) {
-            System.out.println("Invalid slot code.");
-            return;
-        }
+public void selectItem(VendingMachine m, String code) {
+    Slot slot = m.getSlot(code);
 
-        if(slot.isEmpty()) {
-            System.out.println("Selected slot is empty.");
-            return;
-        }
-
-        m.setSelectedSlot(slot);
-        m.setState(m.getItemSelectedState());
+    if (slot == null) {
+        System.out.println("Invalid slot code.");
+        return;
     }
+
+    if (slot.isEmpty()) {
+        System.out.println("Item sold out, select another.");
+        if (m.areAllSlotsEmpty()) {
+            m.setState(m.getSoldOutState());
+        }
+        return;
+    }
+
+    m.setSelectedSlot(slot);
+    m.setState(m.getItemSelectedState());
+    System.out.println("Selected: " + slot.getItem().getName()
+                     + " | Price: Rs." + slot.getItem().getPrice());
+}
 
     @Override
     public void insertMoney(VendingMachine m, int amount) {
